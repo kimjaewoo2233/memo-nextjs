@@ -5,6 +5,7 @@ import DarkModeToggle from "./darkmode-toggle";
 import Image from "next/image";
 import { useRecoilValue } from "recoil";
 import { sidebarisOpenState } from "@/recoil";
+import FileTree from "./tree";
 
 const Sidebar = () => {
     const sidebarIsOpen = useRecoilValue(sidebarisOpenState);
@@ -18,6 +19,11 @@ const Sidebar = () => {
             <ArrowSidebar/>
             <div className="w-full relative">
                 <DarkModeToggle className={`absolute right-0 ${sidebarIsOpen && 'hidden'}`}/>
+                <div className={cn("pt-[50px]", {
+                    'hidden': sidebarIsOpen
+                })}>
+                    <FileTree/>
+                </div>
             </div>
         </aside>
     )
