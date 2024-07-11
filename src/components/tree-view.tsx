@@ -7,6 +7,7 @@ import { FaFile } from "react-icons/fa";
 import { cn, formUrlQuery } from "@/lib/utils";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Dropdown from "./drop-down";
 
 const TreeView = ({ data }: TreeViewProps) => {
 
@@ -59,8 +60,11 @@ const TreeView = ({ data }: TreeViewProps) => {
                             "bg-gray-300 rounded-sm" :(selectedRootNodeId === node.id && node.depth === 1) ||  searchParams.get("id") === node.segment,
                             "bg-gray-500": (selectedNodeId === node.id),
                         })} onClick={() => handleToggle(node)}>
-                            {node.kind === "D" ? <GoFileDirectoryFill/> : <FaFile/>}
-                            {node.label}
+                            <span className="flex flex-row items-center gap-3">
+                                {node.kind === "D" ? <GoFileDirectoryFill/> : <FaFile/>}
+                                {node.label}
+                            </span>
+                            {node.kind === "D" && <Dropdown label={node.label}/>}
                         </TreeItem>
                         <div className={cn("overflow-hidden transition-all duration-1000 ease-in-out",{
                             "max-h-screen": expandedNodes.has(node.id),

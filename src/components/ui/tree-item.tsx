@@ -14,7 +14,7 @@ export const TreeItem = <T extends ElementType = "div">({
     const Component = as || "div";
 
     return (
-        <Component className={cn("p-2 cursor-pointer flex flex-row items-center gap-3", className)} {...props}>
+        <Component className={cn("p-2 cursor-pointer flex flex-row items-center justify-between gap-3", className)} {...props}>
             {children}
         </Component>
     )

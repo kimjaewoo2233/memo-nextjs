@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { BsMoonStars, BsMoonStarsFill } from "react-icons/bs";
 
 const DarkModeToggle = ({ className }: { className?: string}) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -20,7 +21,7 @@ const DarkModeToggle = ({ className }: { className?: string}) => {
           className={cn("p-2 bg-gray-200 dark:bg-gray-800 text-black dark:text-white rounded", className)}
           onClick={() => setIsDarkMode(!isDarkMode)}
         >
-          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+          {isDarkMode ? <BsMoonStars /> : <BsMoonStarsFill />}
         </button>
     );
 }

@@ -25,3 +25,24 @@ export function findRootNodeId({startFindNode, treeData}: { startFindNode: TreeN
 
     return currentNode?.id;
 }
+
+export function addNode({ nodes, newNode, parentNodeId }: {nodes: TreeNodeData[]; newNode: TreeNodeData; parentNodeId: string}): TreeNodeData[] {
+    return nodes.map(node => {
+        if (node.id === parentNodeId) {
+            const updatedNode = {
+                ...node,
+                children: node.children ? [...node.children, newNode] : [newNode]
+            };
+            return updatedNode;
+        }
+
+        if (node.children) {
+            return {
+                ...node,
+                children: addNode({ nodes: node.children, newNode: newNode, parentNodeId: parentNodeId })
+            };
+        }
+
+        return node;
+    });
+}
