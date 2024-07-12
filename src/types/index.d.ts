@@ -23,3 +23,12 @@ declare type TreeNodeData = {
 declare type TreeViewProps = {
     data: TreeNodeData[];
 }
+
+declare type Kind = "D" | "F";
+
+
+declare type DropdownProps = {
+    kind: Kind;
+    label: string;
+    items: { label: string; onClick: () => void }[];
+}

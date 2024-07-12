@@ -1,13 +1,13 @@
 "use client"
-import { findRootNodeId } from "@/lib/find-root-id";
-import { TreeNodeData, TreeViewProps } from "@/types";
+import { DropdownProps, Kind, TreeNodeData, TreeViewProps } from "@/types";
 import { TreeItem } from "./ui/tree-item";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { FaFile } from "react-icons/fa";
 import { cn, formUrlQuery } from "@/lib/utils";
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Dropdown from "./drop-down";
+import { findRootNodeId } from "@/lib/node.utils";
 
 const TreeView = ({ data }: TreeViewProps) => {
 
@@ -64,7 +64,7 @@ const TreeView = ({ data }: TreeViewProps) => {
                                 {node.kind === "D" ? <GoFileDirectoryFill/> : <FaFile/>}
                                 {node.label}
                             </span>
-                            {node.kind === "D" && <Dropdown label={node.label}/>}
+                            <Dropdown label={node.label} kind={node.kind as "D" | "F"} items={isItAFileOrfolder(node.kind as Kind)}/>
                         </TreeItem>
                         <div className={cn("overflow-hidden transition-all duration-1000 ease-in-out",{
                             "max-h-screen": expandedNodes.has(node.id),
@@ -86,4 +86,28 @@ const TreeView = ({ data }: TreeViewProps) => {
     return <div className="list-none">{renderTreeNodes(data)}</div>;
 }
 
+function isItAFileOrfolder(kind: string){
+    if(kind === "D"){ //디렉토리일 경우 드랍다운메뉴
+        return [
+                {
+                    label: "파일추가",
+                    onClick: () => { console.log("파일추가버튼클릭")}
+                },
+                {
+                    label: "폴더 이름 변경",
+                    onClick: () => { console.log("폴더이름변경클릭")}
+                },
+            ]
+    }
+    return [
+            {
+                label: "파일 이름변경",
+                onClick: () => { console.log("파일추가버튼클릭")}
+            },
+            {
+                label: "파일삭제",
+                onClick: () => { console.log("폴더이름변경클릭")}
+            },
+        ]
+}
 export default TreeView;

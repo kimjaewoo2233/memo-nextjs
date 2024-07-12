@@ -1,20 +1,22 @@
 import { HiDotsVertical } from "react-icons/hi";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { TiPlusOutline } from "react-icons/ti";
+import { DropdownProps, Kind } from "@/types";
 
-interface Props {
-    label: string;
-}
 
-const Dropdown = ({ label }: Props) => {
+const Dropdown = ({ kind, label,items }: DropdownProps) => {
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger><HiDotsVertical /></DropdownMenuTrigger>
-
+            <DropdownMenuTrigger>{kind === "D" ? <TiPlusOutline /> : <HiDotsVertical/>}</DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel>{label}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>파일추가</DropdownMenuItem>
+                {items.map((item) => {
+                    return (
+                        <DropdownMenuItem onClick={item.onClick}>{item.label}</DropdownMenuItem>
+                    )
+                })}
             </DropdownMenuContent>
         </DropdownMenu>
     )

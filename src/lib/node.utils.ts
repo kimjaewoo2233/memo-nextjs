@@ -36,7 +36,7 @@ export function addNode({ nodes, newNode, parentNodeId }: {nodes: TreeNodeData[]
             return updatedNode;
         }
 
-        if (node.children) {
+        if (node.children) { //자식 노드가 존재하면 자식 노드 재귀호출
             return {
                 ...node,
                 children: addNode({ nodes: node.children, newNode: newNode, parentNodeId: parentNodeId })
