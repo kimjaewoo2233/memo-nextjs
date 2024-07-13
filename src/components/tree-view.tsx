@@ -7,12 +7,18 @@ import { cn, formUrlQuery } from "@/lib/utils";
 import { lazy, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Dropdown from "./drop-down";
-import { findRootNodeId } from "@/lib/node.utils";
+import { addNode, findRootNodeId } from "@/lib/node.utils";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { treeDataState } from "@/recoil";
+import { v4 as uuidv4 } from 'uuid';
+import { Input } from "./ui/input";
+import FileLabel from "./file-label";
 
 const TreeView = ({ data }: TreeViewProps) => {
 
     const router = useRouter();
     const searchParams= useSearchParams();
+    const [treeMainData, setTreeMainData] = useRecoilState(treeDataState);
 
     const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
     const [selectedRootNodeId, setSelectedRootNodeId] = useState<string | null>(null);
@@ -50,6 +56,45 @@ const TreeView = ({ data }: TreeViewProps) => {
         }
     }
 
+    function isItAFileOrfolder({ kind, parentNodeId, depth }: { kind: string; parentNodeId: string, depth: number}){
+        if(kind === "D"){ //디렉토리일 경우 드랍다운메뉴
+            return [
+                    {
+                        label: "파일추가",
+                        onClick: () => { 
+                            const updatedNodeList = addNode({
+                                nodes: treeMainData,
+                                newNode: {
+                                    id: uuidv4(),
+                                    parentId: parentNodeId,
+                                    label: '',
+                                    kind: 'F',
+                                    depth: depth + 1,
+                                    segment: uuidv4(),
+                                },
+                                parentNodeId: parentNodeId
+                            });
+                            setTreeMainData(updatedNodeList);
+                        }
+                    },
+                    {
+                        label: "폴더 이름 변경",
+                        onClick: () => { console.log("폴더이름변경클릭")}
+                    },
+                ]
+        }
+        return [
+                {
+                    label: "파일 이름변경",
+                    onClick: () => { console.log("파일추가버튼클릭")}
+                },
+                {
+                    label: "파일삭제",
+                    onClick: () => { console.log("폴더이름변경클릭")}
+                },
+            ]
+    }
+
     const renderTreeNodes = (nodes: TreeNodeData[]) => {
         return (
             <>
@@ -60,11 +105,20 @@ const TreeView = ({ data }: TreeViewProps) => {
                             "bg-gray-300 rounded-sm" :(selectedRootNodeId === node.id && node.depth === 1) ||  searchParams.get("id") === node.segment,
                             "bg-gray-500": (selectedNodeId === node.id),
                         })} onClick={() => handleToggle(node)}>
-                            <span className="flex flex-row items-center gap-3">
-                                {node.kind === "D" ? <GoFileDirectoryFill/> : <FaFile/>}
-                                {node.label}
-                            </span>
-                            <Dropdown label={node.label} kind={node.kind as "D" | "F"} items={isItAFileOrfolder(node.kind as Kind)}/>
+                            <div className="flex flex-row items-center gap-3">
+                                <span>
+                                    {node.kind === "D" ? <GoFileDirectoryFill/> : <FaFile/>}
+                                </span>
+                                <span>
+                                    {/* {node.label} */}
+                                    <FileLabel kind={node.kind as Kind} label={node.label}/>
+                                </span>
+                            </div>
+                            <Dropdown label={node.label} kind={node.kind as "D" | "F"} items={isItAFileOrfolder({
+                                kind:node.kind as Kind,
+                                parentNodeId: node.id,
+                                depth: node.depth
+                            })}/>
                         </TreeItem>
                         <div className={cn("overflow-hidden transition-all duration-1000 ease-in-out",{
                             "max-h-screen": expandedNodes.has(node.id),
@@ -86,28 +140,4 @@ const TreeView = ({ data }: TreeViewProps) => {
     return <div className="list-none">{renderTreeNodes(data)}</div>;
 }
 
-function isItAFileOrfolder(kind: string){
-    if(kind === "D"){ //디렉토리일 경우 드랍다운메뉴
-        return [
-                {
-                    label: "파일추가",
-                    onClick: () => { console.log("파일추가버튼클릭")}
-                },
-                {
-                    label: "폴더 이름 변경",
-                    onClick: () => { console.log("폴더이름변경클릭")}
-                },
-            ]
-    }
-    return [
-            {
-                label: "파일 이름변경",
-                onClick: () => { console.log("파일추가버튼클릭")}
-            },
-            {
-                label: "파일삭제",
-                onClick: () => { console.log("폴더이름변경클릭")}
-            },
-        ]
-}
 export default TreeView;

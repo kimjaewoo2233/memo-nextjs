@@ -1,10 +1,14 @@
+"use client"
 import { TreeNodeData } from "@/types";
 import TreeView from "./tree-view";
+import { useRecoilState } from "recoil";
+import { treeDataState } from "@/recoil";
+import { useEffect } from "react";
 
 
 
 //링크 처넣고 링크는 uuid 로 넣는다. -> 세그먼트가 링크로 들어가서 페이지 열수 있또록/ 두번터치시 이름변경가능하게
-const treeData: TreeNodeData[] = [
+const treeTempData: TreeNodeData[] = [
   {
     id: '1',
     parentId: '0',
@@ -39,11 +43,25 @@ const treeData: TreeNodeData[] = [
 ];
 
 const FileTree = () => {
+
+  const [treeData, setTreeData] = useRecoilState(treeDataState);
+  useEffect(() => {
+    setTreeData(treeTempData);
+
+  }, []);
+
+  if(treeData.length === 0){
     return (
-        <>
-          <TreeView data={treeData} />
-        </>
+      <div>
+        비었음
+      </div>
     )
+  }
+  return (
+      <>
+        <TreeView data={treeData} />
+      </>
+  )
 }
 
 export default FileTree;

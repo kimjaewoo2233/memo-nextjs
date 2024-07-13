@@ -26,7 +26,8 @@ export function findRootNodeId({startFindNode, treeData}: { startFindNode: TreeN
     return currentNode?.id;
 }
 
-export function addNode({ nodes, newNode, parentNodeId }: {nodes: TreeNodeData[]; newNode: TreeNodeData; parentNodeId: string}): TreeNodeData[] {
+export function addNode({ nodes, newNode, parentNodeId }: { nodes: TreeNodeData[]; newNode: TreeNodeData; parentNodeId: string }): TreeNodeData[] {
+    console.log(parentNodeId);
     return nodes.map(node => {
         if (node.id === parentNodeId) {
             const updatedNode = {
@@ -36,7 +37,7 @@ export function addNode({ nodes, newNode, parentNodeId }: {nodes: TreeNodeData[]
             return updatedNode;
         }
 
-        if (node.children) { //자식 노드가 존재하면 자식 노드 재귀호출
+        if (node.children) { // 자식 노드가 존재하면 자식 노드 재귀 호출
             return {
                 ...node,
                 children: addNode({ nodes: node.children, newNode: newNode, parentNodeId: parentNodeId })

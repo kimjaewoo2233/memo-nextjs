@@ -12,9 +12,9 @@ const Dropdown = ({ kind, label,items }: DropdownProps) => {
             <DropdownMenuContent>
                 <DropdownMenuLabel>{label}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {items.map((item) => {
+                {items.map((item, index) => {
                     return (
-                        <DropdownMenuItem onClick={item.onClick}>{item.label}</DropdownMenuItem>
+                        <DropdownMenuItem onClick={item.onClick} key={index}>{item.label}</DropdownMenuItem>
                     )
                 })}
             </DropdownMenuContent>
