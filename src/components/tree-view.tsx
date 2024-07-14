@@ -4,7 +4,7 @@ import { TreeItem } from "./ui/tree-item";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { FaFile } from "react-icons/fa";
 import { cn, formUrlQuery } from "@/lib/utils";
-import { lazy, useState } from "react";
+import { lazy, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Dropdown from "./drop-down";
 import { addNode, findRootNodeId } from "@/lib/node.utils";
@@ -24,6 +24,7 @@ const TreeView = ({ data }: TreeViewProps) => {
     const [selectedRootNodeId, setSelectedRootNodeId] = useState<string | null>(null);
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
+    const inputRef = useRef<HTMLInputElement>(null);
     const handleToggle = (nodeData: TreeNodeData) => {
         const { id, parentId, depth, segment, kind } = nodeData;
 
@@ -58,16 +59,18 @@ const TreeView = ({ data }: TreeViewProps) => {
 
     function isItAFileOrfolder({ kind, parentNodeId, depth }: { kind: string; parentNodeId: string, depth: number}){
         if(kind === "D"){ //디렉토리일 경우 드랍다운메뉴
+     
             return [
                     {
                         label: "파일추가",
                         onClick: () => { 
+                            const uuid =  uuidv4();
                             const updatedNodeList = addNode({
                                 nodes: treeMainData,
                                 newNode: {
                                     id: uuidv4(),
                                     parentId: parentNodeId,
-                                    label: '',
+                                    label: '새로운 파일',
                                     kind: 'F',
                                     depth: depth + 1,
                                     segment: uuidv4(),
@@ -105,14 +108,14 @@ const TreeView = ({ data }: TreeViewProps) => {
                             "bg-gray-300 rounded-sm" :(selectedRootNodeId === node.id && node.depth === 1) ||  searchParams.get("id") === node.segment,
                             "bg-gray-500": (selectedNodeId === node.id),
                         })} onClick={() => handleToggle(node)}>
-                            <div className="flex flex-row items-center gap-3">
-                                <span>
+                            <div className="flex flex-row items-center gap-3 w-full">
+                                <div>
                                     {node.kind === "D" ? <GoFileDirectoryFill/> : <FaFile/>}
-                                </span>
-                                <span>
+                                </div>
+                                <div className="w-full">
                                     {/* {node.label} */}
-                                    <FileLabel kind={node.kind as Kind} label={node.label}/>
-                                </span>
+                                    <FileLabel kind={node.kind as Kind} label={node.label} nodeId={node.id}/>
+                                </div>
                             </div>
                             <Dropdown label={node.label} kind={node.kind as "D" | "F"} items={isItAFileOrfolder({
                                 kind:node.kind as Kind,

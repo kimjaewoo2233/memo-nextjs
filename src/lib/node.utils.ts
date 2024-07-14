@@ -27,7 +27,6 @@ export function findRootNodeId({startFindNode, treeData}: { startFindNode: TreeN
 }
 
 export function addNode({ nodes, newNode, parentNodeId }: { nodes: TreeNodeData[]; newNode: TreeNodeData; parentNodeId: string }): TreeNodeData[] {
-    console.log(parentNodeId);
     return nodes.map(node => {
         if (node.id === parentNodeId) {
             const updatedNode = {
@@ -46,4 +45,24 @@ export function addNode({ nodes, newNode, parentNodeId }: { nodes: TreeNodeData[
 
         return node;
     });
+}
+
+export function updateNodeLabel({ nodes, nodeId, newLabel }: { nodes: TreeNodeData[]; nodeId: string; newLabel: string }): TreeNodeData[] {
+    return nodes.map(node => {
+        if(node.id === nodeId) {
+            return {
+                ...node,
+                label: newLabel
+            }
+        }
+
+        if(node.children){
+            return {
+                ...node,
+                children: updateNodeLabel({ nodes: node.children, nodeId, newLabel })
+            }
+        }
+
+        return node;
+    })
 }
