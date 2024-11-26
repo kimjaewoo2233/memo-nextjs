@@ -6,7 +6,7 @@ export const sidebarisOpenState = atom<boolean>({
     default: false
 }) 
 
-export const treeDataState = atom<TreeNodeData[]>({
+export const treeDataState = atom<TreeNodeData[] | null>({
     key: 'treeDataState',
-    default: [],
+    default: null,
   });

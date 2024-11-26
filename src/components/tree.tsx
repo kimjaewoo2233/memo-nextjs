@@ -50,16 +50,24 @@ const FileTree = () => {
 
   }, []);
 
-  if(treeData.length === 0){
+  if(treeData && treeData.length === 0){
     return (
       <div>
         비었음
       </div>
     )
   }
+
+  if(!treeData){
+    return (
+      <div>
+        로딩중
+      </div>
+    )
+  }
   return (
       <>
-        <TreeView data={treeData} />
+        <TreeView data={treeData!} />
       </>
   )
 }

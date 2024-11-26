@@ -6,11 +6,11 @@ import Image from "next/image";
 import { useRecoilValue } from "recoil";
 import { sidebarisOpenState } from "@/recoil";
 import FileTree from "./tree";
+import Link from "next/link";
 
 const Sidebar = () => {
     const sidebarIsOpen = useRecoilValue(sidebarisOpenState);
 
-    console.log(sidebarIsOpen);
     return (
         <aside className={cn("sticky left-0 top-0 flex h-screen flex-col justify-between border-r border-gray-400 pt-8 max-md:hidden sm:p-4 xl:p-6  transition-all  duration-300", {
             "w-[50px]": sidebarIsOpen,

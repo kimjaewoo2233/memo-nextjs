@@ -3,11 +3,16 @@ import { ReactNode } from "react";
 
 export const dynamic = 'force-dynamic'
 
-export default function RootLayout({ children }: { children: ReactNode}) {
+interface Props {
+    children: ReactNode;
+    sidebar: ReactNode;
+}
+
+export default function RootLayout({ children, sidebar }: Props) {
 
     return (
         <main className="flex">
-            <Sidebar/>
+            {sidebar}
             <div className="flex-1">
                 {children}
             </div>
