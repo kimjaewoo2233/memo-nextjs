@@ -19,8 +19,9 @@ const Sidebar = () => {
             <ArrowSidebar/>
             <div className="w-full relative">
                 <DarkModeToggle className={`absolute right-0 ${sidebarIsOpen && 'hidden'}`}/>
-                <div className={cn("pt-[50px]", {
-                    'hidden': sidebarIsOpen
+                <div className={cn("pt-[50px] transition-opacity  ease-in-out", {
+                    "opacity-0 invisible": sidebarIsOpen,
+                    "opacity-100 visible": !sidebarIsOpen
                 })}>
                     <FileTree/>
                 </div>

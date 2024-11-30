@@ -11,12 +11,12 @@ declare type TreeItemProps<T extends ElementType> = {
 }
 
 declare type TreeNodeData = {
-    id: string;
-    parentId: string;
-    label: string;
-    kind: string;
-    depth: number;
-    segment: string;
+    id: string; //
+    parentId: string; //
+    label: string; //
+    kind: string; //
+    depth: number; //
+    segment: string; //
     children?: TreeNodeData[]; // 재귀
 }
 

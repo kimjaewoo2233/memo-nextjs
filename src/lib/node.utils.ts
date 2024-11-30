@@ -1,4 +1,5 @@
 import { TreeNodeData } from "@/types";
+import {param} from "ts-interface-checker";
 
 export function findRootNodeId({startFindNode, treeData}: { startFindNode: TreeNodeData | undefined; treeData: TreeNodeData[]}) {
     const findNode = (nodes: TreeNodeData[], id: string): TreeNodeData | undefined => {
@@ -26,27 +27,42 @@ export function findRootNodeId({startFindNode, treeData}: { startFindNode: TreeN
     return currentNode?.id;
 }
 
-export function addNode({ nodes, newNode, parentNodeId }: { nodes: TreeNodeData[]; newNode: TreeNodeData; parentNodeId: string }): TreeNodeData[] {
-    return nodes.map(node => {
+export function addNode({
+                            nodes,
+                            newNode,
+                            parentNodeId,
+                        }: {
+    nodes: TreeNodeData[];
+    newNode: TreeNodeData;
+    parentNodeId: string;
+}): TreeNodeData[] {
+    let updatedNodes: TreeNodeData[] = [];
+
+    for (const node of nodes) {
         if (node.id === parentNodeId) {
-            const updatedNode = {
+            updatedNodes.push({
                 ...node,
-                children: node.children ? [...node.children, newNode] : [newNode]
-            };
-            return updatedNode;
+                children: node.children ? [...node.children, newNode] : [newNode],
+            });
+            continue;
         }
 
-        if (node.children) { // 자식 노드가 존재하면 자식 노드 재귀 호출
-            return {
-                ...node,
-                children: addNode({ nodes: node.children, newNode: newNode, parentNodeId: parentNodeId })
-            };
+        if (node.children) {
+            const updatedChildren = addNode({ nodes: node.children, newNode, parentNodeId });
+            if (updatedChildren !== node.children) { //현 자식 중 parentNodeId 겹치는게 있다는거
+                updatedNodes.push({
+                    ...node, //자식이 업데이트 됐으니 본인도 업데이트됨
+                    children: updatedChildren,
+                });
+                continue;
+            }
         }
 
-        return node;
-    });
+        updatedNodes.push(node);
+    }
+
+    return updatedNodes;
 }
-
 export function updateNodeLabel({ nodes, nodeId, newLabel }: { nodes: TreeNodeData[]; nodeId: string; newLabel: string }): TreeNodeData[] {
     return nodes.map(node => {
         if(node.id === nodeId) {

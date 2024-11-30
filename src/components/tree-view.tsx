@@ -59,21 +59,20 @@ const TreeView = ({ data }: TreeViewProps) => {
 
     function isItAFileOrfolder({ kind, parentNodeId, depth }: { kind: string; parentNodeId: string, depth: number}){
         if(kind === "D"){ //디렉토리일 경우 드랍다운메뉴
-     
             return [
                     {
                         label: "파일추가",
-                        onClick: () => { 
+                        onClick: () => {
                             const uuid =  uuidv4();
                             const updatedNodeList = addNode({
-                                nodes: treeMainData,
+                                nodes: treeMainData || [],
                                 newNode: {
-                                    id: uuidv4(),
-                                    parentId: parentNodeId,
+                                    id: uuid,
+                                    parentId: parentNodeId!,
                                     label: '새로운 파일',
                                     kind: 'F',
                                     depth: depth + 1,
-                                    segment: uuidv4(),
+                                    segment: uuid,
                                 },
                                 parentNodeId: parentNodeId
                             });
@@ -103,11 +102,15 @@ const TreeView = ({ data }: TreeViewProps) => {
             <>
             {
                 nodes.map((node) => (
-                    <div key={node.id}>
-                        <TreeItem as="div" className={cn({
+                    <div key={node.id} className="overflow-hidden whitespace-nowrap">
+                        <TreeItem
+                            as="div"
+                            className={cn({
                             "bg-gray-300 rounded-sm" :(selectedRootNodeId === node.id && node.depth === 1) ||  searchParams.get("id") === node.segment,
                             "bg-gray-500": (selectedNodeId === node.id),
-                        })} onClick={() => handleToggle(node)}>
+                            })}
+                            onClick={() => handleToggle(node)}
+                        >
                             <div className="flex flex-row items-center gap-3 w-full">
                                 <div>
                                     {node.kind === "D" ? <GoFileDirectoryFill/> : <FaFile/>}
@@ -117,7 +120,10 @@ const TreeView = ({ data }: TreeViewProps) => {
                                     <FileLabel kind={node.kind as Kind} label={node.label} nodeId={node.id}/>
                                 </div>
                             </div>
-                            <Dropdown label={node.label} kind={node.kind as "D" | "F"} items={isItAFileOrfolder({
+                            <Dropdown
+                                label={node.label}
+                                kind={node.kind as "D" | "F"}
+                                items={isItAFileOrfolder({
                                 kind:node.kind as Kind,
                                 parentNodeId: node.id,
                                 depth: node.depth
