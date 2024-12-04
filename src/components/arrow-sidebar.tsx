@@ -1,28 +1,32 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { sidebarisOpenState } from "@/recoil";
+import {darkModeState, sidebarisOpenState} from "@/recoil";
 import Image from "next/image";
 import { useState } from "react";
-import { useRecoilState } from "recoil";
-
+import {useRecoilState, useRecoilValue} from "recoil";
+import { IoArrowBackCircleSharp, IoArrowBackCircleOutline } from "react-icons/io5";
+import {clsx} from "clsx";
 
 const ArrowSidebar = () => {
-    const [isRotated, setIsRotated] = useState<boolean>(false);
+    const isDarkMode = useRecoilValue(darkModeState);
     const [sidebarIsOpen, setSidebarIsOpen] = useRecoilState(sidebarisOpenState);
     return (
-        <Image
-            src="/icons/arrow_right.svg"
-            alt="ARROW"
-            width={50}
-            height={50}
-            className={cn("absolute -right-7 top-20 z-10 cursor-pointer bg-black-900 rounded-full transition-transform duration-300", {
-                "rotate-180": isRotated
+        <div
+            className={clsx("absolute -right-4 top-20 cursor-pointer",{
+                "hidden":sidebarIsOpen
             })}
             onClick={() => {
-                setIsRotated(rotated => !rotated)
                 setSidebarIsOpen(sidebarIsOpen => !sidebarIsOpen);
             }}
-        />
+        >
+            {
+                isDarkMode ?
+                    <IoArrowBackCircleSharp  size={30} style={{ background: "black"}}/>
+                    :
+                    <IoArrowBackCircleOutline size={30} style={{ background: "white"}}/>
+
+            }
+        </div>
     )
 
 }

@@ -18,6 +18,28 @@ const config = {
       },
     },
     extend: {
+      fontSize: {
+        'h1': ['48px', '58px'], // [fontSize, lineHeight]
+        'h2': ['40px', '48px'],
+        'h3': ['32px', '38px'],
+        'h4': ['28px', '34px'],
+        'h5': ['24px', '28px'],
+        's1': ['18px', '28px'],
+        's2': ['16px', '24px'],
+        'b1': ['16px', '24px'],
+        'b2': ['16px', '24px'],
+        'b3': ['14px', '20px'],
+        'b4': ['14px', '20px'],
+        'c1': ['12px', '16px'],
+        'c2': ['12px', '16px'],
+        'c3': ['10px', '14px'],
+        'label': ['12px', '16px'],
+        'button-giant': ['18px', '24px'],
+        'button-large': ['16px', '20px'],
+        'button-medium': ['14px', '16px'],
+        'button-small': ['12px', '16px'],
+        'button-tiny': ['10px', '12px'],
+      },
       transitionDuration: {
         '1800': '1800ms'
       },
@@ -177,6 +199,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+}
 
 export default config

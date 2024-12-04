@@ -3,9 +3,11 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { BsMoonStars, BsMoonStarsFill } from "react-icons/bs";
+import {useRecoilState} from "recoil";
+import {darkModeState} from "@/recoil";
 
 const DarkModeToggle = ({ className }: { className?: string}) => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeState);
 
     useEffect(() => {
         const root = window.document.documentElement;

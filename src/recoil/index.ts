@@ -9,4 +9,9 @@ export const sidebarisOpenState = atom<boolean>({
 export const treeDataState = atom<TreeNodeData[] | null>({
     key: 'treeDataState',
     default: null,
-  });
+});
+
+export const darkModeState = atom<boolean>({
+    key: "darkModeState",
+    default: false
+})
