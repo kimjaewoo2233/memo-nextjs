@@ -1,4 +1,4 @@
-import { ElementType, ReactNode } from "react";
+import {ComponentPropsWithoutRef, ElementType, ReactNode} from "react";
 
 declare type SearchParamProps = {
     params: {[key: string]: string};
@@ -32,3 +32,6 @@ declare type DropdownProps = {
     label: string;
     items: { label: string; onClick: () => void }[];
 }
+
+declare type PolymorphicComponentProps<C extends ElementType, Props>  =
+    Props & Omit<ComponentPropsWithoutRef<C>, keyof Props>

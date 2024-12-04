@@ -49,7 +49,7 @@ export function addNode({
 
         if (node.children) {
             const updatedChildren = addNode({ nodes: node.children, newNode, parentNodeId });
-            if (updatedChildren !== node.children) { //현 자식 중 parentNodeId 겹치는게 있다는거
+            if (updatedChildren !== node.children) { //현 자식 중 parentNodeId 겹치는게 있다는거 (객체 참조비교 일부로한거임) 같은 걸 참조하는지
                 updatedNodes.push({
                     ...node, //자식이 업데이트 됐으니 본인도 업데이트됨
                     children: updatedChildren,

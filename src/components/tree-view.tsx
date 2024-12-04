@@ -24,7 +24,7 @@ const TreeView = ({ data }: TreeViewProps) => {
     const [selectedRootNodeId, setSelectedRootNodeId] = useState<string | null>(null);
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const handleToggle = (nodeData: TreeNodeData) => {
         const { id, parentId, depth, segment, kind } = nodeData;
 
@@ -46,7 +46,7 @@ const TreeView = ({ data }: TreeViewProps) => {
             setSelectedRootNodeId(rootParentId);
         }
 
-        if(kind !== "D") {
+        if(kind !== "D") { //파일일 경우
             const newURL = formUrlQuery({
                 params: searchParams.toString(),
                 key: "id",
@@ -124,12 +124,12 @@ const TreeView = ({ data }: TreeViewProps) => {
                                 label={node.label}
                                 kind={node.kind as "D" | "F"}
                                 items={isItAFileOrfolder({
-                                kind:node.kind as Kind,
-                                parentNodeId: node.id,
-                                depth: node.depth
+                                    kind:node.kind as Kind,
+                                    parentNodeId: node.id,
+                                    depth: node.depth
                             })}/>
                         </TreeItem>
-                        <div className={cn("overflow-hidden transition-all duration-1000 ease-in-out",{
+                        <div className={cn("overflow-hidden transition-all duration-1800 ease-in-out",{
                             "max-h-screen": expandedNodes.has(node.id),
                             "max-h-0": !expandedNodes.has(node.id)
                         })}>

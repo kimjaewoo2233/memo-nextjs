@@ -12,10 +12,15 @@ const Sidebar = () => {
     const sidebarIsOpen = useRecoilValue(sidebarisOpenState);
 
     return (
-        <aside className={cn("sticky left-0 top-0 flex h-screen flex-col justify-between border-r border-gray-400 pt-8 max-md:hidden sm:p-4 xl:p-6  transition-all  duration-300", {
-            "w-[50px]": sidebarIsOpen,
-            "w-[355px]": !sidebarIsOpen
-        })}>
+        <aside
+            className={cn(
+                "sticky left-0 top-0 flex h-screen flex-col justify-between transition-all duration-500",
+                {
+                    "w-0 overflow-hidden border-0 p-0": sidebarIsOpen,
+                    "w-[355px] border-r border-gray-400 sm:p-4": !sidebarIsOpen,
+                }
+            )}
+        >
             <ArrowSidebar/>
             <div className="w-full relative">
                 <DarkModeToggle className={`absolute right-0 ${sidebarIsOpen && 'hidden'}`}/>
